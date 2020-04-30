@@ -41,9 +41,14 @@ INSTALLED_APPS = [
 
     'basic.apps.BasicConfig',
     'api.apps.ApiConfig',
+    'users.apps.UsersConfig',
+
+
     'rest_framework',
     'bootstrap4',
     'debug_toolbar',
+
+    
 ]
 
 MIDDLEWARE = [
@@ -127,7 +132,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+#STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = [
+        os.path.join(BASE_DIR, 'static')
+]
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 INTERNAL_IPS = ('127.0.0.1',)
 
+
+LOGIN_REDIRECT_URL = '/u/profile'
+LOGIN_URL = '/u/login'
+LOGOUT_REDIRECT_URL = '/'

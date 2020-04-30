@@ -1,0 +1,68 @@
+{% extends "basic/base.html" %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href={% static "css/jquery.dataTables.min.css" %}>
+<link rel="stylesheet" href={% static "css/dataTables.bootstrap4.min.css" %}>
+{% endblock css %}
+
+{% block content %}
+<h1 class="text-center">
+    User List
+</h1>
+<table id="dtProjects" class="table table-striped table-hover table-sm compact">
+    <thead class="">
+        <tr>
+            <th scope="col">
+                #
+            </th>
+            <th scope="col">
+                User
+            </th>
+            <th scope="col">
+                First Name
+            </th>
+            <th scope="col">
+                Last Name
+            </th>
+            <th scope="col">
+                Email
+            </th>
+            <th scope="col">
+                Staff
+            </th>
+            <th scope="col">
+                Active
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in user_list %}
+        <tr class="align-middle">
+            <td scope="row" class="align-middle">
+                {{ user.id }}
+            </td>
+            <td class="align-middle">
+                {{ user.username }}
+            </td>
+            <td class="align-middle">
+                {{ user.first_name }}
+            </td>
+            <td class="align-middle">
+                {{ user.last_name }}
+            </td>
+            <td class="align-middle">
+                {{ user.email }}
+            </td>
+            <td class="align-middle">
+                {{ user.is_staff }}
+            </td>
+            <td class="align-middle">
+                {{ user.is_active }}
+            </td>
+        </tr>
+        {% endfor %}
+
+    </tbody>
+</table>
+
+{% endblock content %}

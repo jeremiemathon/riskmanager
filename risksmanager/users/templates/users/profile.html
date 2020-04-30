@@ -1,0 +1,6 @@
+{% extends 'basic/base.html' %}
+{% block content %}
+    {% if user.is_authenticated %}Hello, {{ user.email }}.{% endif %}
+    {{ context }}
+{% endblock content %}
+    

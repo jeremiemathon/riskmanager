@@ -15,6 +15,7 @@ class ProjectForm(forms.ModelForm):
         self.fields["security_needs"].widget = forms.widgets.SelectMultiple()
         #self.fields["security_needs"].widget = forms.widgets.CheckboxSelectMultiple()
         self.fields["security_needs"].queryset = SecurityNeedValue.objects.all()
+        # self.fields["contributors"].widget = forms.CheckboxSelectMultiple()
 
         wtf = SecurityNeedValue.objects.all();
         w = self.fields['security_needs'].widget

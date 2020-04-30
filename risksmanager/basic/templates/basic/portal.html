@@ -27,10 +27,20 @@
 			<th scope="col">
 				Tags
 			</th>
+			<th scope="col">
+				Contributors
+			</th>
+			<th scope="col">
+				Progress
+			</th>
 		</tr>
 	</thead>
 	<tbody>
+
+		{% comment %} Start Tableau {% endcomment %}
 		{% for project in projects %}
+		{% if user in project.contributors.all or user.username == "admin" %}
+
 		<tr class="align-middle">
 			<td scope="row" class="align-middle">
 				<a href="{% url 'projectdelete' project.pk %}"><span style="color: red"><i
@@ -64,8 +74,22 @@
 				{% endif %}
 				{% endfor %}
 			</td>
+			<td class="align-middle">
+				{% for contributor in project.contributors.all %}
+				{{ contributor }}<br>
+				{% endfor %}
+			</td>
+			<td class="align-middle">
+				<div class="progress">
+					<div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25"
+						aria-valuemin="0" aria-valuemax="100">25%</div>
+				</div>
+			</td>
 		</tr>
+		{% endif %}
 		{% endfor %}
+		{% comment %} End Tableau {% endcomment %}
+
 	</tbody>
 </table>
 

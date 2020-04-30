@@ -23,6 +23,7 @@
   <link href="/static/css/sb-admin-2.min.css" rel="stylesheet">
   <link rel="stylesheet" href={% static "css/jquery.dataTables.min.css" %}>
   <link rel="stylesheet" href={% static "css/dataTables.bootstrap4.min.css" %}>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
 </head>
 
@@ -139,15 +140,23 @@
       </li>
 
       <!-- Nav Item - Tables -->
-      <li class="nav-item">
-        <a class="nav-link" href="tables.html">
-          <i class="fas fa-fw fa-table"></i>
-          <span>Tables</span></a>
-      </li>
+
 
       <!-- Divider -->
       <hr class="sidebar-divider d-none d-md-block">
-
+      <div class="sidebar-heading">
+        User
+      </div>
+      <li class="nav-item">
+        <a class="nav-link" href={% url 'login' %}>
+          <i class="fas fa-fw fa-sign-in-alt"></i>
+          <span>Login</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href={% url 'register' %}>
+          <i class="fas fa-fw fa-register"></i>
+          <span>Register</span></a>
+      </li>
       <!-- Sidebar Toggler (Sidebar) -->
       <div class="text-center d-none d-md-inline">
         <button class="rounded-circle border-0" id="sidebarToggle"></button>
@@ -209,7 +218,7 @@
               </div>
             </li>
 
-            <!-- Nav Item - Alerts -->
+            {% comment %} <!-- Nav Item - Alerts -->
             <li class="nav-item dropdown no-arrow mx-1">
               <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
@@ -258,9 +267,9 @@
                 </a>
                 <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
               </div>
-            </li>
+            </li> {% endcomment %}
 
-            <!-- Nav Item - Messages -->
+            {% comment %} <!-- Nav Item - Messages -->
             <li class="nav-item dropdown no-arrow mx-1">
               <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
@@ -320,7 +329,7 @@
                 </a>
                 <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
               </div>
-            </li>
+            </li> {% endcomment %}
 
             <div class="topbar-divider d-none d-sm-block"></div>
 
@@ -328,7 +337,7 @@
             <li class="nav-item dropdown no-arrow">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
-                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Valerie Luna</span>
+                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{user.first_name}} {{user.last_name}}</span>
                 <img class="img-profile rounded-circle" src="https://source.unsplash.com/QAB-WJcbgJk/60x60">
               </a>
               <!-- Dropdown - User Information -->
@@ -401,7 +410,7 @@
           <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
           <div class="modal-footer">
             <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-            <a class="btn btn-primary" href="login.html">Logout</a>
+            <a class="btn btn-primary" href="logout">Logout</a>
           </div>
         </div>
       </div>

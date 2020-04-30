@@ -85,6 +85,7 @@ urlpatterns = [
 
     path('admin/', admin.site.urls, name="admin"),
     path('api/', include('api.urls')),
+    path('u/', include('users.urls')),
 ]
 
 

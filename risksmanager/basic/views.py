@@ -26,6 +26,10 @@ from .models import (
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .forms import ProjectForm, ControlForm, TagForm, ProjectControlForm
+from plotly.offline import plot
+from plotly.graph_objs import Scatter, Pie, Data, Layout, Figure
+from django.db.models import Q
+
 
 
 class Graph(TemplateView):
@@ -34,14 +38,15 @@ class Graph(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(Graph, self).get_context_data(**kwargs)
 
-        x = [-2,0,4,6,7]
+        x = [-2, 0, 4, 6, 7]
         y = [q**2-q+3 for q in x]
         trace1 = go.Scatter(x=x, y=y, marker={'color': 'red', 'symbol': 104, 'size': 10},
                             mode="lines",  name='1st Trace')
 
-        data=go.Data([trace1])
-        layout=go.Layout(title="Meine Daten", xaxis={'title':'x1'}, yaxis={'title':'x2'})
-        figure=go.Figure(data=data,layout=layout)
+        data = go.Data([trace1])
+        layout = go.Layout(title="Meine Daten", xaxis={
+                           'title': 'x1'}, yaxis={'title': 'x2'})
+        figure = go.Figure(data=data, layout=layout)
         div = opy.plot(figure, auto_open=False, output_type='div')
 
         context['graph'] = div
@@ -51,10 +56,11 @@ class Graph(TemplateView):
 
 def create_project_control(self, form):
     controls = Control.objects.all()
-    #ProjectControl.objects.filter(project=Project.objects.get(pk=form.instance.pk)).delete()
+    # ProjectControl.objects.filter(project=Project.objects.get(pk=form.instance.pk)).delete()
     for security_need in form.instance.security_needs.all():  # pour chaque besoin de sécurité du projet
         for control in controls:  # pour chaque controle
-            for applicable_securityneedvalue in control.applicable_securityneedvalue.all():  # pour chaque besoin de sécurité applicable
+            # pour chaque besoin de sécurité applicable
+            for applicable_securityneedvalue in control.applicable_securityneedvalue.all():
                 if (security_need == applicable_securityneedvalue):
                     for tag in form.instance.tags.all():
                         for controltag in control.applicable_tags.all():
@@ -63,17 +69,21 @@ def create_project_control(self, form):
                                         project=Project.objects.get(pk=form.instance.pk)).filter(
                                         control=Control.objects.get(pk=control.pk)).count() == 0):
                                     ProjectControl.objects.get_or_create(
-                                        project=Project.objects.get(pk=form.instance.pk),
-                                        control=Control.objects.get(pk=control.pk),
+                                        project=Project.objects.get(
+                                            pk=form.instance.pk),
+                                        control=Control.objects.get(
+                                            pk=control.pk),
                                         applicable="A",
                                         status="NP",
                                     )
 
+
 def create_control_project(self, form):
     print("Beginning Control Update to Projects")
     projects = Project.objects.all()
-    #ProjectControl.objects.filter(project=Project.objects.get(pk=form.instance.pk)).delete()
-    for security_need in form.instance.applicable_securityneedvalue.all():  # pour chaque besoin de sécurité applicable
+    # ProjectControl.objects.filter(project=Project.objects.get(pk=form.instance.pk)).delete()
+    # pour chaque besoin de sécurité applicable
+    for security_need in form.instance.applicable_securityneedvalue.all():
         for project in projects:
             for project_securityneed in project.security_needs.all():
                 if (security_need == project_securityneed):
@@ -83,19 +93,23 @@ def create_control_project(self, form):
                                 if (ProjectControl.objects.filter(
                                         project=Project.objects.get(pk=project.pk)).filter(
                                         control=Control.objects.get(pk=form.instance.pk)).count() == 0):
-                                            ProjectControl.objects.get_or_create(
-                                                project=Project.objects.get(pk=project.pk),
-                                                control=Control.objects.get(pk=form.instance.pk),
-                                                applicable="A",
-                                                status="NP",
-                                            )
-                                            print("Control Non Existant -> Applicable Project : " + str(project.code))
+                                    ProjectControl.objects.get_or_create(
+                                        project=Project.objects.get(
+                                            pk=project.pk),
+                                        control=Control.objects.get(
+                                            pk=form.instance.pk),
+                                        applicable="A",
+                                        status="NP",
+                                    )
+                                    print(
+                                        "Control Non Existant -> Applicable Project : " + str(project.code))
+
 
 def get_data(self, form):
     return JsonResponse()
 
 
-class portalnewListView(ListView):
+class portalnewListView(LoginRequiredMixin, ListView):
     model = Project
     template_name = "basic/index.html"
     context_object_name = 'projects'
@@ -108,20 +122,31 @@ class portalnewListView(ListView):
 
         return render(request, 'basic/index.html', context)
 
-class portalListView(ListView):
+
+class portalListView(LoginRequiredMixin, ListView):
     model = Project
     template_name = "basic/portal.html"
     context_object_name = 'projects'
 
+    projects_data = Project.objects.all()
+    for project in projects_data:
+        project.done = ProjectControl.objects.filter(Q(project=project.id) & Q(status="D")).count()
+        project.notplanned = ProjectControl.objects.filter(Q(project=project.id) & Q(status="NP")).count()
+        project.planned = ProjectControl.objects.filter(Q(project=project.id) & Q(status="P")).count()
+        print("Done " + str(project.done))
+
+
+
     def get(self, request):
         context = {
             'title': 'Security Policy - Policy Detail',
-            'projects': Project.objects.all(),
+            'projects': self.projects_data,
         }
 
         return render(request, 'basic/portal.html', context)
 
-class projectListView(ListView):
+
+class projectListView(LoginRequiredMixin, ListView):
     model = Project
     template_name = "basic/project.html"
 
@@ -135,13 +160,13 @@ class projectListView(ListView):
 
 class projectCreateView(LoginRequiredMixin, CreateView):
     model = Project
-    login_url = '/admin/'
+    # login_url = '/admin/'
     #fields = '__all__'
     form_class = ProjectForm
 
-
     def get_context_data(self, *args, **kwargs):
-        context = super(projectCreateView, self).get_context_data(*args, **kwargs)
+        context = super(projectCreateView, self).get_context_data(
+            *args, **kwargs)
 
         context.update({
             'securityneedvalues': SecurityNeedValue.objects.all().values_list('value', flat=True).distinct(),
@@ -149,8 +174,6 @@ class projectCreateView(LoginRequiredMixin, CreateView):
         })
 
         return context
-
-
 
     def form_valid(self, form):
         response = super(projectCreateView, self).form_valid(form)
@@ -161,12 +184,12 @@ class projectCreateView(LoginRequiredMixin, CreateView):
         return response
 
 
-class projectDeleteView(DeleteView):
+class projectDeleteView(LoginRequiredMixin, DeleteView):
     model = Project
     success_url = reverse_lazy('portal')
 
 
-class projectUpdateView(UpdateView):
+class projectUpdateView(LoginRequiredMixin, UpdateView):
     model = Project
     form_class = ProjectForm
 
@@ -176,20 +199,45 @@ class projectUpdateView(UpdateView):
         create_project_control(self, form)
         return response
 
-class projectDetailView(UpdateView):
-    model  = Project
+
+class projectDetailView(LoginRequiredMixin, UpdateView):
+    model = Project
     # form_class = ControlForm
     template_name = "basic/project.html"
 
     def get(self, request, id):
+        layout = Layout(
+            plot_bgcolor='rgba(0,0,0,0)',
+            paper_bgcolor='rgba(0,0,0,0)',
+        )
+        x_data = [0, 1, 2, 3]
+        y_data = [x**2 for x in x_data]
+        labels = ['Done', 'Not Planned', 'Planned']
+
+        done = ProjectControl.objects.filter(Q(project=id) & Q(status="D")).count()
+        notplanned = ProjectControl.objects.filter(Q(project=id) & Q(status="NP")).count()
+        planned = ProjectControl.objects.filter(Q(project=id) & Q(status="P")).count()
+        
+        values = [done, notplanned, planned]
+        # plot_div = plot([Scatter(x=x_data, y=y_data,
+        #                          mode='lines', name='test',
+        #                          opacity=0.8, marker_color='green')],
+        #                 output_type='div')
+
+        data = Data([Pie(labels=labels, values=values,
+                             opacity=0.8)])
+        fig = Figure(data=data, layout=layout)   
+        plot_div = plot(fig, output_type='div')
+
         context = {
             'project': Project.objects.get(pk=id),
             'projectcontrols': ProjectControl.objects.all(),
+            'plot_div': plot_div,
         }
         return render(request, 'basic/project.html', context)
 
 
-class controlUpdateView(UpdateView):
+class controlUpdateView(LoginRequiredMixin, UpdateView):
     model = Control
     fields = '__all__'
    #form_class = ProjectForm
@@ -201,25 +249,23 @@ class controlUpdateView(UpdateView):
         return response
 
 
-
-
-class projectControlUpdateView(UpdateView):
+class projectControlUpdateView(LoginRequiredMixin, UpdateView):
     model = ProjectControl
     form_class = ProjectControlForm
 
-class projectControlDeleteView(DeleteView):
+
+class projectControlDeleteView(LoginRequiredMixin, DeleteView):
     model = ProjectControl
     success_url = "/"
 
 
-
-
-class controlListView(ListView):
+class controlListView(LoginRequiredMixin, ListView):
     model = Control
     context_object_name = 'controls'
 
-class controlDetailView(UpdateView):
-    model  = Control
+
+class controlDetailView(LoginRequiredMixin, UpdateView):
+    model = Control
     form_class = ControlForm
 
     def form_valid(self, form):
@@ -227,14 +273,17 @@ class controlDetailView(UpdateView):
         #create_project_control(self, form)
         return response
 
-class controlCreateView(CreateView):
+
+class controlCreateView(LoginRequiredMixin, CreateView):
     model = Control
     fields = '__all__'
 
-class securityNeedListValueView(ListView):
+
+class securityNeedListValueView(LoginRequiredMixin, ListView):
     model = SecurityNeedValue
 
-class securityNeedListView(ListView):
+
+class securityNeedListView(LoginRequiredMixin, ListView):
     model = SecurityNeed
 
     '''def get_context_data(self, *args, **kwargs):
@@ -246,36 +295,37 @@ class securityNeedListView(ListView):
 
         return context'''
 
-class securityNeedCreateView(CreateView):
+
+class securityNeedCreateView(LoginRequiredMixin, CreateView):
     model = SecurityNeed
     fields = '__all__'
 
 
-class securityNeedDetailView(DetailView):
+class securityNeedDetailView(LoginRequiredMixin, DetailView):
     model = SecurityNeed
 
 
-class tagListView(ListView):
+class tagListView(LoginRequiredMixin, ListView):
     model = Tag
     context_object_name = 'tags'
 
-class tagDetailView(DetailView):
-    model  = Tag
+
+class tagDetailView(LoginRequiredMixin, DetailView):
+    model = Tag
     form_class = TagForm
 
-class tagCreateView(CreateView):
+
+class tagCreateView(LoginRequiredMixin, CreateView):
     model = Tag
     fields = '__all__'
 
-class tagUpdateView(UpdateView):
+
+class tagUpdateView(LoginRequiredMixin, UpdateView):
     model = Tag
     form_class = TagForm
 
-class tagDeleteView(DeleteView):
+
+class tagDeleteView(LoginRequiredMixin, DeleteView):
     model = Tag
     fields = '__all__'
     success_url = reverse_lazy('tags')
-
-
-
-

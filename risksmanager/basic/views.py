@@ -128,19 +128,23 @@ class portalListView(LoginRequiredMixin, ListView):
     template_name = "basic/portal.html"
     context_object_name = 'projects'
 
-    projects_data = Project.objects.all()
-    for project in projects_data:
-        project.done = ProjectControl.objects.filter(Q(project=project.id) & Q(status="D")).count()
-        project.notplanned = ProjectControl.objects.filter(Q(project=project.id) & Q(status="NP")).count()
-        project.planned = ProjectControl.objects.filter(Q(project=project.id) & Q(status="P")).count()
-        print("Done " + str(project.done))
-
+    def calculate_summary(self):
+        projects = Project.objects.all()
+        for project in projects:
+            print(project.name)
+            project.done = ProjectControl.objects.filter(Q(project=project.id) & Q(status="D")).count()
+            project.notplanned = ProjectControl.objects.filter(Q(project=project.id) & Q(status="NP")).count()
+            project.planned = ProjectControl.objects.filter(Q(project=project.id) & Q(status="P")).count()
+            project.total = project.done + project.notplanned + project.planned
+            project.complete = '%02d' % (project.done / project.total * 100)
+            print(project.complete)
+        return(projects)
 
 
     def get(self, request):
         context = {
             'title': 'Security Policy - Policy Detail',
-            'projects': self.projects_data,
+            'projects': self.calculate_summary(),
         }
 
         return render(request, 'basic/portal.html', context)

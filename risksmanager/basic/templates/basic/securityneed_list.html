@@ -1,0 +1,37 @@
+{% extends "basic/base.html" %}
+{% load static %}
+{% block content %}
+<div class="row">
+<div class="col-sm-12">
+	<h1 class="text-center">
+		Needs
+	</h1>
+<table id="dtProjects" class="table table-striped table-hover table-sm table-borderless">
+	<thead class="black text-white">
+	<tr>
+		<th scope="col">
+			#
+		</th>
+		<th scope="col">
+			Security Need Name
+		</th>
+	</tr>
+	</thead>
+	<tbody>
+	{% for securityneed in securityneed_list %}
+	<tr class="align-middle">
+		<th scope="row" class="align-middle">
+			<a href="{% url 'need' securityneed.pk %}"><i class="fas fa-trash"></i></a>
+			<a href="{% url 'need' securityneed.pk %}">{{ securityneed.pk }}</a>
+
+		</th>
+		<td class="align-middle">
+			{{ securityneed.name }}
+		</td>
+
+	</tr>
+	{% endfor %}
+	</tbody>
+</table>
+</div>
+{% endblock content %}

@@ -1,0 +1,23 @@
+{% extends "basic/base.html" %}
+{% load bootstrap4 %}
+{% block content %}
+<input type="hidden" name="{{ form.name.name }}" id="{{ form.name.id_for_label }}">
+        <input type="hidden" name="{{ form.code.name }}" id="{{ form.code.id_for_label }}">
+        <input type="hidden" name="{{ form.description.name }}" id="{{ form.description.id_for_label }}">
+        <input type="hidden" value="Save">
+{{ context }}
+
+<div class="row">
+    <div class="col-md-12">
+        <form method="post">
+        {% csrf_token %}
+            {% bootstrap_field form.name layout='vertical' size='sm' %}
+            {% bootstrap_field form.color layout='horizontal' size='sm' %}
+
+        {% buttons %}
+        <button type="submit" class="btn btn-primary">Submit</button>
+        {% endbuttons %}
+        </form></div>
+
+</div>
+{% endblock content %}

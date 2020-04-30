@@ -1,0 +1,12 @@
+{% extends "basic/base.html" %}
+{% load bootstrap4 %}
+
+
+
+{% block content %}
+<form method="post">{% csrf_token %}
+    <p>Are you sure you want to delete Control <strong>"{{ object.control.code }}"</strong> for project <strong>"{{ object }}"</strong>?</p>
+    <input type="submit" value="Confirm">
+    <input type="reset" value="Cancel">
+</form>
+{% endblock content %}

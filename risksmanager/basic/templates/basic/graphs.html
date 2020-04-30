@@ -1,0 +1,15 @@
+{% extends "basic/base.html" %}
+{% load static %}
+{% block css %}
+	<link rel="stylesheet" href={% static "css/jquery.dataTables.min.css" %}>
+	<link rel="stylesheet" href={% static "css/dataTables.bootstrap4.min.css" %}>
+{% endblock css %}
+
+{% block content %}
+
+{% if graph %}
+<div style="width:600;height:500">
+{{ graph|safe }}
+</div>
+{% endif %}
+{% endblock content %}

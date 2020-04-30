@@ -1,0 +1,25 @@
+id,code,control_description,title
+2,ORG_01,Define security needs (CID) with the Business (Business Impact Analysis),ORG_01
+3,ORG_02,"As part of a SaaS, PaaS and IaaS project, ensure that a contrat is drawn up and that security requirements are integrated (via Security Insurance Plan, Self-assessment survey, Cloud Risk Assessment, Interconnection Agreement…)(see SLA…)
+
+If the project includes external contractors (IAAS... ) ensure that the RFP includes all security requirements defined by this current process and all tenders are evaluated regarding these criterias.",ORG_02
+4,ORG_03,If the project includes external contractors (IAAS... ) ensure that the contract includes the security insurance plan.,ORG_03
+5,ORG_04,Use secured interconnection methods between third parties and Adeo that includes encryption with strong authentication and personal accounts.,ORG_04
+6,ORG_05,"Ensure that the CMDB is completed with the following information :
+Name of the application, security needs (CID), business activity, IT/Business Leader, list of servers/environments",ORG_05
+7,ORG_06,Integrate in the qualification plan the verification of implementation of security measures and test them.,ORG_06
+8,ACC_01,"Respect the principle of least privilege and the """"need to know"""" by defining specific access rights adapted to profiles and formalize a matrix of roles and privileges
+
+Define and implement user profils with least privileges associated to this role. (Possible to link user profile with business profile)",ACC_01
+9,ACC_02,Define an access review process for users and administrators and monitor sensitive rights like administrator rights.,ACC_02
+10,ACC_03,"Delegate authentication to ADEO identity referential (LDAP, AD, ...)
+Or respect the following recommandations for authentication : 
+- Password encryption
+- strengthness (8 chars, 3 classes from lower and upper case, special char and number)
+- renewal (6 months)
+- Do not use the same password than the 5 lasts
+- Block 1h in case of multiple failures (5 attempts)
+- Mandatory change at the first connection 
+- Use two different channel to communicate login and password (eg : mail and sms)
+- Use nominative account, not transferable",ACC_03
+11,ACC_04,"Use multi factor authentication (ex : PING/Pingone identity, logical certificates, etc.) for accounts handling highly sensitive information or actions (ex : adminitrative accesses)",ACC_04

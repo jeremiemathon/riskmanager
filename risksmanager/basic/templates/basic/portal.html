@@ -1,0 +1,72 @@
+{% extends "basic/base.html" %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href={% static "css/jquery.dataTables.min.css" %}>
+<link rel="stylesheet" href={% static "css/dataTables.bootstrap4.min.css" %}>
+{% endblock css %}
+
+{% block content %}
+<h1 class="text-center">
+	Projects
+</h1>
+<table id="dtProjects" class="table table-striped table-hover table-sm compact">
+	<thead class="">
+		<tr>
+			<th scope="col">
+				#
+			</th>
+			<th scope="col">
+				Product
+			</th>
+			<th scope="col">
+				Description
+			</th>
+			<th scope="col">
+				Security Need
+			</th>
+			<th scope="col">
+				Tags
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for project in projects %}
+		<tr class="align-middle">
+			<td scope="row" class="align-middle">
+				<a href="{% url 'projectdelete' project.pk %}"><span style="color: red"><i
+							class="fas fa-trash"></span></i></a>
+				<a href="{% url 'projectupdate' project.pk %}"><span style="color: blue"><i
+							class="fas fa-edit"></span></i></a>
+				<a href="{% url 'project' project.pk %}">{{ project.code }}</a>
+			</td>
+			<td class="align-middle">
+				{{ project.name }}
+			</td>
+			<td class="align-middle">
+				{{ project.description }}
+			</td>
+			<td class="align-middle">
+				{% for need in project.security_needs.all %}
+				<span onClick="add_fields('{{ need.attribute }} : {{ need.value }}')"
+					class="badge badge-primary">{{ need.attribute }} : {{ need.value }}</span>
+				{% endfor %}
+			</td>
+			<td class="align-middle">
+				{% for tag in project.tags.all %}
+				{% if tag.color == "G" %}
+				<span onClick="add_fields('{{ tag.name }}')" class="badge badge-success">{{ tag.name }}</span>
+				{% endif %}
+				{% if tag.color == "O" %}
+				<span onClick="add_fields('{{ tag.name }}')" class="badge badge-warning">{{ tag.name }}</span>
+				{% endif %}
+				{% if tag.color == "R" %}
+				<span onClick="add_fields('{{ tag.name }}')" class="badge badge-danger">{{ tag.name }}</span>
+				{% endif %}
+				{% endfor %}
+			</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+{% endblock content %}

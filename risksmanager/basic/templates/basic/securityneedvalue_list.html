@@ -1,0 +1,36 @@
+{% extends "basic/base.html" %}
+{% load static %}
+{% block content %}
+<div class="row">
+<div class="col-sm-12">
+	<h1 class="text-center">
+		Needs
+	</h1>
+<table id="dtProjects" class="table table-striped table-hover table-sm compact">
+	<thead class="">
+	<tr>
+		<th width="10%" scope="col">
+			#
+		</th>
+		<th scope="col">
+			Security Need Values
+		</th>
+	</tr>
+	</thead>
+	<tbody>
+	{% for securityneedvalue in securityneedvalue_list %}
+	<tr class="align-middle">
+		<th scope="row" class="align-middle">
+			<a href="{% url 'needvalue' securityneedvalue.pk %}"><span style="color: red"><i class="fas fa-trash"></i></span></a>
+			<a href="{% url 'needvalue' securityneedvalue.pk %}"><span style="color: blue"><i class="fas fa-edit"></i></span></a>
+		</th>
+		<td class="align-middle">
+			<a href="{% url 'needvalue' securityneedvalue.pk %}">{{ securityneedvalue.attribute }} level {{ securityneedvalue.value }}</a>
+		</td>
+
+	</tr>
+	{% endfor %}
+	</tbody>
+</table>
+</div>
+{% endblock content %}

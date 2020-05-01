@@ -137,6 +137,8 @@ class portalListView(LoginRequiredMixin, ListView):
             project.planned = ProjectControl.objects.filter(Q(project=project.id) & Q(status="P")).count()
             project.total = project.done + project.notplanned + project.planned
             project.complete = '%02d' % (project.done / project.total * 100)
+            project.planned = '%02d' % (project.planned / project.total * 100)
+            project.notplanned = '%02d' % (project.notplanned / project.total * 100)
             print(project.complete)
         return(projects)
 

@@ -11,7 +11,6 @@
     <div class="col-md-12">
         <form method="post">
         {% csrf_token %}
-            {{ context.projectcontrol.project }}
             {% bootstrap_field form.project layout='vertical' size='sm' %}
             {% bootstrap_field form.control layout='horizontal' size='sm' %}
             {% bootstrap_field form.applicable layout='horizontal' size='sm' %}

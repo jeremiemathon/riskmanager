@@ -61,9 +61,13 @@ class ProjectControlForm(forms.ModelForm):
         #fields = '__all__'
         fields = ['control', 'project', 'applicable', 'status']
 
+
+
     def __init__(self, *args, **kwargs):
         super(ProjectControlForm, self).__init__(*args, **kwargs)
         self.fields['project'].widget.attrs['readonly'] = True
+        self.fields['project'].widget.attrs['disabled'] = True
         #self.fields['project'].widget = forms.widgets.TextInput(attrs={'readonly':'readonly'})
 
         self.fields['control'].widget.attrs['readonly'] = True
+        self.fields['control'].widget.attrs['disabled'] = True

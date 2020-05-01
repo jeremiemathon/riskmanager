@@ -107,7 +107,7 @@ class Control(models.Model):
 	def __unicode__(self):
 		return u"{0}".format(self.title)
 	def __str__(self):
-		return u"{0}".format(self.title)
+		return u"{0}".format(self.code)
 	def get_absolute_url(self):
 		return reverse_lazy('controls')
 

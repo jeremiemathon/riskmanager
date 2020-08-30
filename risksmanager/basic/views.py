@@ -32,28 +32,6 @@ from django.db.models import Q
 
 
 
-class Graph(TemplateView):
-    template_name = 'basic/graphs.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(Graph, self).get_context_data(**kwargs)
-
-        x = [-2, 0, 4, 6, 7]
-        y = [q**2-q+3 for q in x]
-        trace1 = go.Scatter(x=x, y=y, marker={'color': 'red', 'symbol': 104, 'size': 10},
-                            mode="lines",  name='1st Trace')
-
-        data = go.Data([trace1])
-        layout = go.Layout(title="Meine Daten", xaxis={
-                           'title': 'x1'}, yaxis={'title': 'x2'})
-        figure = go.Figure(data=data, layout=layout)
-        div = opy.plot(figure, auto_open=False, output_type='div')
-
-        context['graph'] = div
-
-        return context
-
-
 def create_project_control(self, form):
     controls = Control.objects.all()
     # ProjectControl.objects.filter(project=Project.objects.get(pk=form.instance.pk)).delete()
@@ -65,9 +43,11 @@ def create_project_control(self, form):
                     for tag in form.instance.tags.all():
                         for controltag in control.applicable_tags.all():
                             if (tag == controltag):
-                                if (ProjectControl.objects.filter(
+                                if (
+                                        ProjectControl.objects.filter(
                                         project=Project.objects.get(pk=form.instance.pk)).filter(
-                                        control=Control.objects.get(pk=control.pk)).count() == 0):
+                                        control=Control.objects.get(pk=control.pk)).count() == 0
+                                    ):
                                     ProjectControl.objects.get_or_create(
                                         project=Project.objects.get(
                                             pk=form.instance.pk),
@@ -76,6 +56,9 @@ def create_project_control(self, form):
                                         applicable="A",
                                         status="NP",
                                     )
+                                form.instance.controls.add(control)
+                                    
+                                
 
 
 def create_control_project(self, form):
@@ -103,6 +86,10 @@ def create_control_project(self, form):
                                     )
                                     print(
                                         "Control Non Existant -> Applicable Project : " + str(project.code))
+                                project=Project.objects.get(pk=project.pk)
+                                control=Control.objects.get(pk=form.instance.pk)
+                                project.controls.add(control)
+                            print(project.controls.all())
 
 
 def get_data(self, form):

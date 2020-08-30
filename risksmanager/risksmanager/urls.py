@@ -39,7 +39,6 @@ from basic.views import (
     tagListView,
     tagDeleteView,
     tagUpdateView,
-    Graph,
 )
 from django.conf import settings
 from basic import views
@@ -81,7 +80,6 @@ urlpatterns = [
     path('tag/<int:pk>/delete',tagDeleteView.as_view(), name="tagdelete"),
     path('tag/<int:pk>/update',tagUpdateView.as_view(), name="tagupdate"),
 
-    path('graphs', Graph.as_view(), name="graphs"),
 
     path('admin/', admin.site.urls, name="admin"),
     path('api/', include('api.urls')),

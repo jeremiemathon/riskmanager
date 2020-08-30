@@ -11,6 +11,7 @@ from basic.models import (
 
 
 class ProjectSerializer(serializers.HyperlinkedModelSerializer):
+    
     class Meta:
         model = Project
         fields = "__all__"
@@ -18,7 +19,7 @@ class ProjectSerializer(serializers.HyperlinkedModelSerializer):
 class ControlSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Control
-        fields = ('name',)
+        fields = "__all__"
 
 class TagSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

@@ -40,6 +40,7 @@ class Project(models.Model):
 	tags = models.ManyToManyField("Tag", related_name="tags")
 	author = models.ForeignKey(User, related_name="author", on_delete=models.DO_NOTHING, default="", null=True, blank=True)
 	contributors  = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="contributors")
+	controls = models.ManyToManyField("Control", related_name="controls", default="", null=True, blank=True)
 
 	def __unicode__(self):
 		return u"{0} [{1}]".format(self.product.name, self.code)

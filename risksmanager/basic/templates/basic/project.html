@@ -3,6 +3,8 @@
 
 
 {% block content %}
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+</div>
 <div class="container">
 	<ul class="nav nav-pills">
 		<li class="nav-item">
@@ -148,7 +150,7 @@
 			</div>
 		</div>
 		<div class="tab-pane" id="measures">
-			<table id="dtProjects" class="table table-hover table-sm compact">
+			{% comment %} <table id="dtProjects" class="table table-hover table-sm compact">
 				<thead class="">
 					<tr>
 						<th scope="col">
@@ -173,7 +175,7 @@
 					<tr class="align-middle" {% if projectcontrol.get_applicable_display != "Applicable" %}
 						style="background-color:#808080" {% endif %}>
 						<th scope="row" class="align-middle">
-							<a href="{% url 'projectcontrolupdate' projectcontrol.pk %}"><span style="color:blue"><i
+							<a data-toggle="modal" href="{% url 'projectcontrolupdate' projectcontrol.pk %}" data-target="#modal"><span style="color:blue"><i
 										class="fas fa-edit"></i></span></a>
 							<a href="{% url 'projectcontroldelete' projectcontrol.pk %}"><span style="color:red"><i
 										class="fas fa-trash"></i></span></a>
@@ -199,6 +201,60 @@
 						</td>
 					</tr>
 					{% endif %}
+					{% endfor %}
+				</tbody>
+			</table> {% endcomment %}
+			<table id="dtProjects" class="table table-hover table-sm compact">
+				<thead class="">
+					<tr>
+						<th scope="col">
+							#
+						</th>
+						<th scope="col">
+							Description
+						</th>
+						<th scope="col">
+							Applicable
+						</th>
+						<th scope="col">
+							Status
+						</th>
+
+					</tr>
+				</thead>
+				<tbody>
+					<h2>Applicable Measures</h2>
+					{% for control in project.controls.all %}
+					
+					<tr class="align-middle" {% if projectcontrol.get_applicable_display != "Applicable" %}
+						style="background-color:#808080" {% endif %}>
+						<th scope="row" class="align-middle">
+							<a data-toggle="modal" href="{% url 'projectcontrolupdate' projectcontrol.pk %}" data-target="#modal"><span style="color:blue"><i
+										class="fas fa-edit"></i></span></a>
+							<a href="{% url 'projectcontroldelete' projectcontrol.pk %}"><span style="color:red"><i
+										class="fas fa-trash"></i></span></a>
+							{{ projectcontrol.control.code }}
+						</th>
+
+						<td>
+							{{ projectcontrol.control.control_description }}
+						</td>
+						<td>
+							{{ projectcontrol.get_applicable_display }}
+						</td>
+						<td>
+							{% if projectcontrol.get_status_display == "Done" %}
+							<i class="fas fa-check" style="color:green"></i>
+							{% endif %}
+							{% if projectcontrol.get_status_display == "Planned" %}
+							<i class="fas fa-clock" style="color:orange"></i>
+							{% endif %}
+							{% if projectcontrol.get_status_display == "Not Planned" %}
+							<i class="fas fa-times" style="color:red"></i>
+							{% endif %}
+						</td>
+					</tr>
+					
 					{% endfor %}
 				</tbody>
 			</table>

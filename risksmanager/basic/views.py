@@ -33,6 +33,8 @@ from django.db.models import Q
 
 
 def create_project_control(self, form):
+    myproject = Project.objects.get(pk=form.instance.pk)
+    print(myproject.projectcontrol_set.all())
     controls = Control.objects.all()
     # ProjectControl.objects.filter(project=Project.objects.get(pk=form.instance.pk)).delete()
     for security_need in form.instance.security_needs.all():  # pour chaque besoin de sécurité du projet
@@ -56,7 +58,7 @@ def create_project_control(self, form):
                                         applicable="A",
                                         status="NP",
                                     )
-                                form.instance.controls.add(control)
+                                # form.instance.controls.add(control)
                                     
                                 
 

@@ -23,6 +23,8 @@ class Tag(models.Model):
 		return self.name
 	def get_absolute_url(self):
 		return reverse_lazy('tags')
+	def __unicode__(self):
+		return self.name
 
 
 class Project(models.Model):
@@ -40,7 +42,8 @@ class Project(models.Model):
 	tags = models.ManyToManyField("Tag", related_name="tags")
 	author = models.ForeignKey(User, related_name="author", on_delete=models.DO_NOTHING, default="", null=True, blank=True)
 	contributors  = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="contributors")
-	controls = models.ManyToManyField("Control", related_name="controls", default="", null=True, blank=True)
+	# controls = models.ManyToManyField("ProjectControl", related_name="controls", default="", null=True, blank=True)
+	# controls = models.ForeignKey("ProjectControl", related_name="controls", on_delete=models.DO_NOTHING, default="", null=True, blank=True)
 
 	def __unicode__(self):
 		return u"{0} [{1}]".format(self.product.name, self.code)

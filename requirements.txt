@@ -3,7 +3,7 @@ astroid==2.4.0
 autopep8==1.5.2
 colorama==0.4.3
 diff-match-patch==20181111
-Django==2.2.12
+Django==2.2.13
 django-admin-sortable==2.1.9
 django-bootstrap4==0.0.7
 django-ckeditor==5.6.1

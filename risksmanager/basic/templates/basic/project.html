@@ -150,7 +150,7 @@
 			</div>
 		</div>
 		<div class="tab-pane" id="measures">
-			{% comment %} <table id="dtProjects" class="table table-hover table-sm compact">
+			<table id="dtProjects" class="table table-hover table-sm compact">
 				<thead class="">
 					<tr>
 						<th scope="col">
@@ -170,8 +170,8 @@
 				</thead>
 				<tbody>
 					<h2>Applicable Measures</h2>
-					{% for projectcontrol in projectcontrols.all %}
-					{% if projectcontrol.project.id == project.id %}
+					{% for projectcontrol in project.projectcontrol_set.all %}
+					{% comment %} {% if projectcontrol.project.id == project.id %} {% endcomment %}
 					<tr class="align-middle" {% if projectcontrol.get_applicable_display != "Applicable" %}
 						style="background-color:#808080" {% endif %}>
 						<th scope="row" class="align-middle">
@@ -200,11 +200,11 @@
 							{% endif %}
 						</td>
 					</tr>
-					{% endif %}
+					{% comment %} {% endif %} {% endcomment %}
 					{% endfor %}
 				</tbody>
-			</table> {% endcomment %}
-			<table id="dtProjects" class="table table-hover table-sm compact">
+			</table>
+			{% comment %} <table id="dtProjects" class="table table-hover table-sm compact">
 				<thead class="">
 					<tr>
 						<th scope="col">
@@ -257,7 +257,7 @@
 					
 					{% endfor %}
 				</tbody>
-			</table>
+			</table> {% endcomment %}
 		</div>
 	</div>
 

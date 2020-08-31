@@ -6,3 +6,4 @@ risksmanager/db.sqlite3
 .vscode/
 .*
 !.gitignore
+__pycache__

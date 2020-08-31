@@ -88,10 +88,8 @@ def create_control_project(self, form):
                                     )
                                     print(
                                         "Control Non Existant -> Applicable Project : " + str(project.code))
-                                project=Project.objects.get(pk=project.pk)
-                                control=Control.objects.get(pk=form.instance.pk)
-                                project.controls.add(control)
-                            print(project.controls.all())
+                                
+                            
 
 
 def get_data(self, form):
@@ -125,9 +123,14 @@ class portalListView(LoginRequiredMixin, ListView):
             project.notplanned = ProjectControl.objects.filter(Q(project=project.id) & Q(status="NP")).count()
             project.planned = ProjectControl.objects.filter(Q(project=project.id) & Q(status="P")).count()
             project.total = project.done + project.notplanned + project.planned
-            project.complete = '%02d' % (project.done / project.total * 100)
-            project.planned = '%02d' % (project.planned / project.total * 100)
-            project.notplanned = '%02d' % (project.notplanned / project.total * 100)
+            if ( project.done == 0 | project.total == 0 | project.notplanned == 0):
+                project.complete = '%02d' % 0
+                project.planned = '%02d' % 0
+                project.notplanned = '%02d' % 100
+            else:
+                project.complete = '%02d' % (project.done / project.total * 100)
+                project.planned = '%02d' % (project.planned / project.total * 100)
+                project.notplanned = '%02d' % (project.notplanned / project.total * 100)
             print(project.complete)
         return(projects)
 
@@ -226,7 +229,7 @@ class projectDetailView(LoginRequiredMixin, UpdateView):
 
         context = {
             'project': Project.objects.get(pk=id),
-            'projectcontrols': ProjectControl.objects.all(),
+            # 'projectcontrols': ProjectControl.objects.all(),
             'plot_div': plot_div,
         }
         return render(request, 'basic/project.html', context)

@@ -1,6 +1,6 @@
 risksmanager/db.sqlite3
 *.pyc
 **/__pycache__/**
-.venv
-.idea
-.vscode
+.venv/
+.idea/
+.vscode/

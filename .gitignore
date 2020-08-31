@@ -1,9 +1,8 @@
-.*
-!.gitignore
 risksmanager/db.sqlite3
 *.pyc
 **/__pycache__/**
 .venv/
 .idea/
 .vscode/
-
+.*
+!.gitignore

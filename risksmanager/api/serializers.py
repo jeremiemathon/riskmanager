@@ -11,10 +11,21 @@ from basic.models import (
 
 
 class ProjectSerializer(serializers.HyperlinkedModelSerializer):
-    
+    # controls = serializers.ModelSerializer(source='projectcontrol_set')
     class Meta:
         model = Project
         fields = "__all__"
+        fields = (  
+                'url',
+                'name',
+                'code',
+                'description',
+                'author',
+                'security_needs',
+                'tags',
+                'contributors',
+                'projectcontrol_set',
+                )
 
 class ControlSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
